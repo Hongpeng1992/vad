@@ -19,14 +19,6 @@ class ConvCell(tf.nn.rnn_cell.RNNCell):
                
         self._num_units = (self._input_shape[1] - self._kernel_size) // self._stride + 1 if self._padding.upper() == 'VALID' else self._input_shape[1]
         
-        #self._recurrent_kernel = self.add_variable('recurent_kernel',
-        #                                           shape=[1, self._num_units, self._filters], 
-        #                                           initializer=tf.contrib.layers.xavier_initializer())
-               
-        #self._bias = self.add_variable('bias',
-        #                               shape=[1, self._num_units, self._filters], 
-        #                               initializer=tf.contrib.layers.xavier_initializer())
-        
         self._recurrent_kernel = self.add_variable('recurent_kernel',
                                                    shape=[1, 1, self._filters], 
                                                    initializer=tf.contrib.layers.xavier_initializer())
@@ -46,11 +38,8 @@ class ConvCell(tf.nn.rnn_cell.RNNCell):
                                 padding=self._padding.upper(),
                                 name='conv1d')
                
-            
             recurrent = self._recurrent_kernel * state
-               
-            outputs =  conv + recurrent + self._bias
-               
+            outputs =  conv + recurrent + self._bias   
             if self._activation:
                 outputs = self._activation(outputs)
 

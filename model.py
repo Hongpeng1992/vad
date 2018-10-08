@@ -6,6 +6,8 @@ def get_model(features, model, mean, std, is_training, return_activations):
     N_CAND = model['N_CAND']
     SEQ_LEN = model['SEQ_LEN']
     BATCH_SIZE = model['BATCH_SIZE']
+    RNN_STRIDE = model['RNN_STRIDE']
+    PADDING = model['PADDING']
     
     with tf.name_scope('standardization'):
         nnet = features - mean
@@ -24,7 +26,7 @@ def get_model(features, model, mean, std, is_training, return_activations):
             conv_predictions_train = tf.reduce_max(conv, axis=1)
 
     with tf.variable_scope('RNN'):
-        cell = ConvCell((SEQ_LEN, N_CAND, 1), filters=1, kernel_size=32, padding='SAME', activation=tf.nn.sigmoid, name='recurent_cell')
+        cell = ConvCell((SEQ_LEN, N_CAND, 1), filters=1, kernel_size=32, stride=RNN_STRIDE, padding=PADDING, activation=tf.nn.sigmoid, name='recurent_cell')
         rnn_output, state = tf.nn.dynamic_rnn(cell, conv_output, sequence_length=[SEQ_LEN] * BATCH_SIZE, dtype=tf.float32)
 
     with tf.name_scope('RNN_output'):
