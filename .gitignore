@@ -5,3 +5,4 @@ logdir/
 trained_model/
 *.xml
 *.iml
+training_data/
